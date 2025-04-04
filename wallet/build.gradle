@@ -1,81 +1,81 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    namespace 'com.coinomi.wallet.dev'
+    compileSdkVersion 33 // Updated for modern compatibility
+    buildToolsVersion "33.0.2"
 
     defaultConfig {
         applicationId "com.coinomi.wallet.dev"
-        minSdkVersion 10
-        targetSdkVersion 23
+        minSdkVersion 16  // 10 is extremely outdated — bumping to a minimum sane version
+        targetSdkVersion 33
         versionCode 56
         versionName "v1.6.3"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     sourceSets {
-        androidTest {
-            setRoot('src/test')
-        }
+        androidTest.setRoot('src/test')
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 
 repositories {
+    google()
+    mavenCentral()
+    jcenter()
     flatDir {
         dirs 'aars'
     }
 }
 
-//sourceSets {
-//    unitTest {
-//        java.srcDir file('src/test/java')
-//        resources.srcDir file('src/test/resources')
-//    }
-//}
-
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile fileTree(dir: '../core/libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: '../core/libs', include: ['*.jar'])
+
+    implementation project(':core')
+
+    // Android Support libraries
+    implementation 'com.android.support:gridlayout-v7:23.3.0'
+    implementation 'com.android.support:support-v4:23.3.0'
+    implementation 'com.android.support:appcompat-v7:23.3.0'
+
+    // Optional: legacy AAR fragment support
+    implementation 'com.android.support:support-v4-preferencefragment:1.0.0@aar'
+
+    // Misc
+    implementation 'com.google.guava:guava:16.0.1'
+    implementation 'com.google.code.findbugs:jsr305:2.0.1'
+    implementation 'com.madgag.spongycastle:core:1.51.0.0'
+    implementation 'com.google.protobuf:protobuf-java:2.5.0'
+    implementation 'com.google.zxing:core:3.1.0'
+    implementation 'ch.acra:acra:4.8.5'
+    implementation 'com.jakewharton:butterknife:7.0.1'
+
     // Testing
-//    androidTestCompile 'junit:junit:4.11'
-//    androidTestCompile 'org.robolectric:robolectric:2.3'
-//    androidTestCompile 'com.squareup:fest-android:1.0.+'
-    compile project(':core')
-    compile 'com.android.support:gridlayout-v7:23.3.0'
-    compile 'com.android.support:support-v4:23.3.0'
-    compile 'com.android.support:appcompat-v7:23.3.0'
-//    compile 'com.android.support:preference-v7:23.2.1'
-    compile 'com.google.guava:guava:16.0.1'
-    compile 'com.google.code.findbugs:jsr305:2.0.1'
-    compile 'com.madgag.spongycastle:core:1.51.0.0'
-    compile 'com.google.protobuf:protobuf-java:2.5.0'
-    compile 'com.google.zxing:core:3.1.0'
-    compile 'ch.acra:acra:4.8.5'
-    compile 'com.android.support:support-v4-preferencefragment:1.0.0@aar'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
-
-//apply plugin: 'robolectric'
-
-//robolectric {
-//    include '**/*Test.class'
-//    exclude '**/espresso/**/*.class'
-//}
-
-//apply plugin: 'idea'
-
-//idea {
-//    module {
-//        testOutputDir = file('build/test-classes/debug')
-//    }
-//}
